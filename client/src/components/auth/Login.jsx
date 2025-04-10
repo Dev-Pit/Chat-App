@@ -1,13 +1,44 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { errorHandleToast } from "../../utils/ErrorHandleToast";
+
+import userApi from "../../api/user";
+import { USER_CREDENTIAL } from "../../utils/Constants";
+
+import { CgLogIn } from "react-icons/cg";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
     e.preventDefault();
     // Add your login logic here (e.g., API call)
-    console.log("Logging in with:", { email, password });
+    try {
+      if (!email || !password) {
+        toast.info("Fill all input fields", {
+          position: "top-center",
+          autoClose: 3000,
+        });
+        return;
+      }
+      const res = await userApi.userLogin({ email, password });
+
+      // todo : save user details / token on cookie or localStorage
+      // console.log(`token : ${JSON.stringify(res.data.token)}`);
+      localStorage.setItem(USER_CREDENTIAL, JSON.stringify(res.data.token));
+      toast.success("Login successful! ", {
+        position: "top-center", // Optional customization
+        autoClose: 3000, // Closes after 3 seconds
+      });
+
+      navigate("/dashboard");
+    } catch (error) {
+      errorHandleToast(error);
+    }
   };
 
   return (
@@ -45,24 +76,28 @@ const Login = () => {
                 <input
                   type="password"
                   id="password"
+                  name="password"
+                  autoComplete=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your password"
                   value={password}
+                  minLength={6}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
               <div className="flex items-center justify-between gap-2">
                 <button
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="flex items-center gap-1 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit">
+                  <CgLogIn />
                   Login
                 </button>
-                <a
-                  href="/register" // Replace with your actual register route
+                <Link
+                  to="/register" // Replace with your actual register route
                   className="inline-block align-baseline font-semibold text-sm text-blue-500 hover:text-blue-800">
                   Don't have an account? Register
-                </a>
+                </Link>
               </div>
             </form>
           </div>

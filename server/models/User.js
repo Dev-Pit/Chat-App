@@ -30,7 +30,7 @@ const userSchema = new Schema(
 
 // Example of password hashing before saving (Mongoose middleware)
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+  if (this.isNew || this.isModified("password")) {
     // Hash the password here using bcrypt or any other library
     this.password = await bcrypt.hash(this.password, 10);
   }

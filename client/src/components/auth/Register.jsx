@@ -1,14 +1,53 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import userApi from "../../api/user";
+import { errorHandleToast } from "../../utils/ErrorHandleToast";
+
+import { toast } from "react-toastify";
+import { FaDoorOpen } from "react-icons/fa";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = (e) => {
+  const [status, setStatus] = useState("idle");
+
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
     e.preventDefault();
-    // Add your registration logic here (e.g., API call)
-    console.log("Registering with:", { username, email, password });
+
+    setStatus("pending"); // Request starts
+
+    try {
+      if (!username || !email || !password) {
+        throw new Error("Please! fill up all input fields.");
+      }
+      // send data to the server
+      const response = await userApi.postUser({ username, email, password });
+      setStatus("fulfilled");
+      toast.success(
+        "Registration successful! " + JSON.stringify(response.data.message),
+        {
+          position: "top-center", // Optional customization
+          autoClose: 3000, // Closes after 3 seconds
+        }
+      );
+      navigate("/login");
+    } catch (error) {
+      setStatus("rejected");
+      // Check if the error is from Axios (server response) or a local throw
+      errorHandleToast(error);
+    } finally {
+      // Reset status and clear fields only on success (move this logic if needed)
+      if (status === "fulfilled") {
+        setUsername("");
+        setEmail("");
+        setPassword("");
+      }
+      setStatus("idle");
+    }
   };
 
   return (
@@ -30,6 +69,7 @@ const Register = () => {
                 <input
                   type="text"
                   id="username"
+                  name="username"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your username"
                   value={username}
@@ -46,6 +86,7 @@ const Register = () => {
                 <input
                   type="email"
                   id="email"
+                  name="email"
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your email"
                   value={email}
@@ -54,14 +95,14 @@ const Register = () => {
                 />
               </div>
               <div className="mb-6">
-                <label
-                  htmlFor="password"
-                  className="block text-gray-700 text-sm font-bold mb-2">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
                   Password
                 </label>
                 <input
                   type="password"
                   id="password"
+                  name="password"
+                  autoComplete=""
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Your password"
                   value={password}
@@ -71,15 +112,17 @@ const Register = () => {
               </div>
               <div className="flex items-center justify-between gap-1">
                 <button
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  type="submit">
+                  className="flex items-center gap-1 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  type="submit"
+                  disabled={status === "pending" ? true : false}>
+                  <FaDoorOpen />
                   Register
                 </button>
-                <a
-                  href="/login" // Replace with your actual login route
+                <Link
+                  to="/login" // Replace with your actual login route
                   className="inline-block align-baseline font-semibold text-sm text-green-500 hover:text-green-800">
                   Already have an account? Login
-                </a>
+                </Link>
               </div>
             </form>
           </div>

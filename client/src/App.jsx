@@ -4,14 +4,17 @@ import MainPanel from "./components/main_panel/MainPanel";
 import MemberPanel from "./components/member_panel/MemberPanel";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
-    <>
-      {/* <Login />
-      <Register/> */}
-      <ComponentLayout/>
-    </>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/dashboard" element={<ComponentLayout />} />
+      {/* <Register/> */}
+      {/* <ComponentLayout/> */}
+    </Routes>
   );
 }
 

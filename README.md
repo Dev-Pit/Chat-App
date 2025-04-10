@@ -14,6 +14,7 @@ This project aims to demonstrate the utilization of socket.io in chat applicatio
 - [envalid](https://www.npmjs.com/package/envalid) for validating and accessing enviroment variables
 - [bcrypt](https://www.npmjs.com/package/bcrypt) for hashing password
 - [http-errors]() for handling http errors
+- [Json-Web-Token]() for generating tokens
 
 ## Screenshots
 

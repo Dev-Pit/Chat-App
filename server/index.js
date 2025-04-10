@@ -7,7 +7,9 @@ import mongoose from "mongoose";
 
 const PORT = process.env.PORT;
 const MONGO_CONNECTION_STRING = process.env.MONGO_CONNECTION_STRING;
-console.log("PORT:", PORT);  // Add this line
+export const SECRET_KEY = process.env.SECRET_KEY;
+
+console.log("PORT:", PORT); // Add this line
 console.log("MONGO_CONNECTION_STRING:", MONGO_CONNECTION_STRING); // Add this line
 
 if (!PORT) {

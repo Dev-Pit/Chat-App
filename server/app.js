@@ -1,8 +1,10 @@
 import express from "express";
 import http from "http";
 import createHttpError, { isHttpError } from "http-errors";
+import cors from "cors";
 import { Server } from "socket.io";
 
+import indexRoute from "./routers/index.js";
 import userRoutes from "./routers/User.js";
 
 const app = express();
@@ -11,6 +13,7 @@ const server = http.createServer(app);
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // Initialize Socket.IO with the server
 const io = new Server(server);
@@ -25,6 +28,7 @@ io.on("connection", (socket) => {
 });
 
 // Use your router for REST API endpoints
+app.use(indexRoute);
 app.use("/auth", userRoutes);
 
 app.use((error, req, res, next) => {
