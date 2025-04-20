@@ -10,12 +10,12 @@ import SentMessage from "./SentMessage";
 const MainPanel = () => {
   return (
     <div className="w-full flex flex-col">
-      <div className="w-full bg-amber-50 flex justify-between items-center p-2 border-b-1 border-gray-200 ">
-        <div className="flex items-center gap-2">
+      <div className="w-full flex bg-[#ececec] justify-between items-center p-2 border-b-1 border-gray-200 ">
+        <div className="flex items-center gap-2 ">
           <RiWechatFill size={24} />
           <div className="flex flex-col">
             <h2 className="text-xl font-black">RoomName</h2>{" "}
-            <p className="text-sm">Description</p>
+            <p className="text-sm font-bold">Description</p>
           </div>
         </div>
         <div className="flex gap-4 mr-4">
@@ -30,18 +30,11 @@ const MainPanel = () => {
           {/* <RxInfoCircled size={24} /> */}
         </div>
       </div>
-      <div className="h-[80%] px-2 py-3 bg-gray-50 overflow-y-scroll hide-scrollbar">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum illo
-        sed vero ad debitis distinctio quae quis praesentium deleniti. Deleniti
-        suscipit voluptate dicta illo corporis, deserunt laudantium alias natus
-        molestias! Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        Dolorum illo sed vero ad debitis distinctio quae quis praesentium
-        deleniti. Deleniti suscipit voluptate dicta illo corporis, deserunt
-        laudantium alias natus molestias! Lorem ipsum dolor sit amet consectetur
+      <div className="h-full px-4 py-2 bg-gray-50 overflow-y-scroll hide-scrollbar">
         <ReceivedMessage />
-        <SentMessage/>
+        <SentMessage />
       </div>
-      <div className=" h-[8%] flex align-middle items-center mb-2">
+      <div className=" h-auto flex align-middle items-center mb-2">
         <div className=" w-full px-2 flex gap-1">
           <input
             type="text"

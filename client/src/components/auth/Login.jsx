@@ -9,8 +9,8 @@ import { USER_CREDENTIAL } from "../../utils/Constants";
 import { CgLogIn } from "react-icons/cg";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("acb@gmail.com");
+  const [password, setPassword] = useState("abcabc");
 
   const navigate = useNavigate();
 
@@ -18,18 +18,19 @@ const Login = () => {
     e.preventDefault();
     // Add your login logic here (e.g., API call)
     try {
-      if (!email || !password) {
+      if (!(email || password)) {
         toast.info("Fill all input fields", {
           position: "top-center",
           autoClose: 3000,
         });
         return;
       }
+      // console.log(`client: loginpage: Email: ${email} Password: ${password}`);
       const res = await userApi.userLogin({ email, password });
 
       // todo : save user details / token on cookie or localStorage
-      // console.log(`token : ${JSON.stringify(res.data.token)}`);
-      localStorage.setItem(USER_CREDENTIAL, JSON.stringify(res.data.token));
+      console.log(`token : ${JSON.stringify(res.data.data)}`);
+      localStorage.setItem(USER_CREDENTIAL, JSON.stringify(res.data.data));
       toast.success("Login successful! ", {
         position: "top-center", // Optional customization
         autoClose: 3000, // Closes after 3 seconds

@@ -1,11 +1,9 @@
 import express from "express";
 import http from "http";
-import createHttpError, { isHttpError } from "http-errors";
 import cors from "cors";
-import { Server } from "socket.io";
+import cookieParser from "cookie-parser";
 
-import indexRoute from "./routers/index.js";
-import userRoutes from "./routers/User.js";
+import { socketHandler } from "./util/SocketHandler.js";
 
 const app = express();
 const server = http.createServer(app);
@@ -14,34 +12,31 @@ const server = http.createServer(app);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(cookieParser());
 
 // Initialize Socket.IO with the server
-const io = new Server(server);
-
-// Listen for connections from clients
-io.on("connection", (socket) => {
-  console.log(`\nserver:=> New connection: ${socket.id}`);
-
-  socket.on("disconnect", () => {
-    console.log(`\nserver:=> User has left!!! :=> ${socket.id}`);
-  });
-});
+socketHandler(server);
 
 // Use your router for REST API endpoints
-app.use(indexRoute);
-app.use("/auth", userRoutes);
+import userRouter from "./routers/user.route.js";
+import indexRouter from "./routers/index.route.js";
+import errorHandler from "./middlewares/errorHandler.middleware.js";
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/dashboard", indexRouter);
 
-app.use((error, req, res, next) => {
-  console.log("\n🚀 ~ app.use ~ error:", error);
-
-  let errorMessage = `An unknown error occured!`;
-  let statusCode = 500;
-  if (isHttpError(error)) {
-    statusCode = error.statusCode;
-    errorMessage = error.message;
-  }
-  if (error instanceof Error) errorMessage = error.message;
-  res.status(statusCode).json({ error: errorMessage });
-});
+app.use(errorHandler);
 
 export default server;
+// handle Error
+// app.use((error, req, res, next) => {
+//   console.log("\n🚀 ~ app.use ~ error:", error);
+
+//   let errorMessage = `An unknown error occured!`;
+//   let statusCode = 500;
+//   if (isHttpError(error)) {
+//     statusCode = error.statusCode;
+//     errorMessage = error.message;
+//   }
+//   if (error instanceof Error) errorMessage = error.message;
+//   res.status(statusCode).json(new ApiError(statusCode, errorMessage));
+// });

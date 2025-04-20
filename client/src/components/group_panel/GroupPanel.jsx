@@ -16,7 +16,7 @@ const GroupPanel = () => {
   };
 
   return (
-    <section className="w-[40%] flex flex-col border-r-1 border-gray-200">
+    <section className="w-[40%] h-full flex flex-col border-r-1 border-gray-200">
       <div className="w-full flex justify-between items-center gap-1 py-1 ">
         <h2 className="text-2xl font-black m-3 flex items-center gap-1">
           <HiUserGroup /> Groups
@@ -28,13 +28,14 @@ const GroupPanel = () => {
         />
       </div>
       <hr className="text-gray-200" />
-      <div className="h-[80%] mt-1">
+      <div className="h-full mt-1 overflow-auto hide-scrollbar">
+        <GroupList />
         <GroupList />
       </div>
 
-      <div className="relative h-[8%]  mb-2">
-        <hr className="text-gray-200" />
-        <div className="absolute bottom-0 w-full ">
+      <div className=" h-auto py-2 sticky bottom-0 border-t-1 border-gray-200">
+        {/* <hr className="text-gray-200" /> */}
+        <div className=" bottom-0 w-full ">
           <div className="flex justify-center items-center h-full">
             <button
               onClick={handleLogout}
