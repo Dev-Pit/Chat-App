@@ -10,19 +10,19 @@ export const verifyJWT = async (req, _, next) => {
       req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
+      console.log(`\n🔑 you don't have token`);
       throw new ApiError(401, "Token empty, Unauthorized request!");
     }
 
-    console.log(`🔑 Your token: ${token}`);
+    console.log(`\n🔑 Your token: ${token}`);
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-    console.log(`🤐 Decoded token: ${JSON.stringify(decodedToken)}`);
+    console.log(`\n🤐 Decoded token: ${JSON.stringify(decodedToken)}`);
 
     const user = await User.findById(decodedToken?._id).select(
-      "-password -refreshToken"
+      "-password -refreshToken -createdAt -updatedAt -__v"
     );
 
-    // TODO discuss about frontend
     if (!user) {
       console.log(`\n 🔐 user not found on DB according to token.`);
       throw new ApiError(401, "Invalid Access Token");

@@ -1,4 +1,3 @@
-import { ApiError } from "../util/ApiError.js";
 import { ApiResponse } from "../util/ApiResponse.js";
 
 const dashboard = async (req, res, next) => {

@@ -19,7 +19,7 @@ const generateAccessAndRefreshToken = async (userId) => {
     const accessToken = await user.generateAccessToken();
     const refreshToken = await user.generateRefreshToken();
 
-    const userA = await User.findByIdAndUpdate(
+    await User.findByIdAndUpdate(
       userId,
       {
         $set: { refreshToken: refreshToken },
