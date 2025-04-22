@@ -5,7 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../util/constant.js";
 
 // * add options along with cookie
 const options = {
-  httpOnly: true,
+  httpOnly: true, // * it should be true
   secure: process.env.NODE_ENV === "production",
   sameSite: "strict",
 };
@@ -63,10 +63,10 @@ const saveUser = async (req, res, next) => {
 const loginUser = async (req, res, next) => {
   try {
     const { username, email, password } = req.body;
-    if (!(username || email))
+    if (!email.trim() || !password.trim())
       throw new ApiError(400, "all fields are required!");
 
-    if (password === ("" || null || undefined) || password.lenght < 6)
+    if (!password || password.length < 6)
       throw new ApiError(400, "pasword length must be more than 6!");
 
     const findUser = await User.findOne({ $or: [{ username }, { email }] });
@@ -99,7 +99,7 @@ const loginUser = async (req, res, next) => {
 };
 
 const logout = async (req, res, next) => {
-  console.log(`\nlogout controller hit ${req.data}`);
+  console.log(`\nlogout controller hit ${req}`);
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {

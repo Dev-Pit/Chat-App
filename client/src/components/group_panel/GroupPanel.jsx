@@ -6,12 +6,14 @@ import GroupList from "./GroupList";
 
 import { HiUserGroup } from "react-icons/hi";
 import { USER_CREDENTIAL } from "../../utils/Constants";
+import userApi from "../../api/user";
 
 const GroupPanel = () => {
   const navigate = useNavigate();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem(USER_CREDENTIAL);
+    await userApi.userLogout();
     navigate("/login");
   };
 

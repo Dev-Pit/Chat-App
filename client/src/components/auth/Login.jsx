@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { errorHandleToast } from "../../utils/ErrorHandleToast";
@@ -9,8 +9,8 @@ import { USER_CREDENTIAL } from "../../utils/Constants";
 import { CgLogIn } from "react-icons/cg";
 
 const Login = () => {
-  const [email, setEmail] = useState("acb@gmail.com");
-  const [password, setPassword] = useState("abcabc");
+  const [email, setEmail] = useState("test@gmail.com");
+  const [password, setPassword] = useState("testtest");
 
   const navigate = useNavigate();
 
@@ -26,11 +26,20 @@ const Login = () => {
         return;
       }
       // console.log(`client: loginpage: Email: ${email} Password: ${password}`);
+
+      console.log(`\nclient: hitting user login api...`);
       const res = await userApi.userLogin({ email, password });
 
       // todo : save user details / token on cookie or localStorage
-      console.log(`token : ${JSON.stringify(res.data.data)}`);
-      localStorage.setItem(USER_CREDENTIAL, JSON.stringify(res.data.data));
+      console.log(
+        `\nclient: res got after login : ${JSON.stringify(res.data)}`
+      );
+
+      if (res.data) {
+        // store the response on localStorage
+        localStorage.setItem(USER_CREDENTIAL, JSON.stringify(res.data.data));
+      }
+
       toast.success("Login successful! ", {
         position: "top-center", // Optional customization
         autoClose: 3000, // Closes after 3 seconds
@@ -42,6 +51,12 @@ const Login = () => {
     }
   };
 
+  useEffect(() => {
+    const userData = localStorage.getItem(USER_CREDENTIAL);
+    if (userData) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
   return (
     <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
       <div className="relative py-3 sm:max-w-xl sm:mx-auto">

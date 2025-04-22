@@ -5,13 +5,13 @@ export const errorHandleToast = (error) => {
     const serverMessage =
       error.response.data.message || "Something went wrong!";
     toast.error(serverMessage, {
-      position: "top-right",
+      position: "top-center",
       autoClose: 3000,
     });
   } else {
     // Local error (e.g., no internet or validation error)
     toast.error(error.message, {
-      position: "top-right",
+      position: "top-center",
       autoClose: 3000,
     });
   }

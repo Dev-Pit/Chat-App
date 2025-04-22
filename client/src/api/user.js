@@ -1,12 +1,11 @@
 import apiClient from "./client";
 
 const userApi = {
-  userLogin: (data) => {
-    console.log(`client: userAPI: ${JSON.stringify(data)}`);
-    return apiClient.post("/auth/login", data);
-  },
-  postUser: (data) => apiClient.post("/auth/register", data),
-  dashboard: (data) => apiClient.post("/dashboard", data),
+  userLogin: (data) => apiClient.post("/user/login", data),
+  userLogout: () => apiClient.post("/user/logout"),
+
+  postUser: (data) => apiClient.post("/user/register", data),
+  dashboard: () => apiClient.get("/dashboard"),
 };
 
 export default userApi;

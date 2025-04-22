@@ -11,7 +11,12 @@ const server = http.createServer(app);
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173", // or wherever your frontend runs
+    credentials: true, // 💥 this is critical
+  })
+);
 app.use(cookieParser());
 
 // Initialize Socket.IO with the server
